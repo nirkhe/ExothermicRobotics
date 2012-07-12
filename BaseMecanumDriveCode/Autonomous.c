@@ -29,6 +29,47 @@ void autonomousprogram()
 
 void automove(int angle, int distance)
 {
+    //We will use this value a lot, so we just calculate it once
+    int distance_square = distance * distance;
 
+    //We will use these trignometric values a lot
+    //So to avoid computation time, we just define their values early on
+    float cos_x = cos(angle * pi / 180), sin_x = sin(angle * pi / 180);
 
+    //Using trig, I will convert the movement to the appropriate linear components
+    int x_distance = (int)(distance * cos_x);
+    int y_distance = (int)(distance * sin_x);
+
+    ResetEncoders();
+
+    //Variable for PID loop
+    int power = 0;
+
+    //The PID Progression used will be a gradual ramp up with a defining power variable which will be indexed.
+    while( /* insert test case here */)
+    {
+        //Movement functions
+        move(LF, power * (sin_x + cos_x));
+        move(RB, power * (sin_x + cos_x));
+        move(LB, power * (sin_x - cos_x));
+        move(RF, power * (sin_x - cos_x));
+
+        //Calculation of values traveled
+        int x_traveled = (Encoder(LF) + Encoder(RB) - Encoder(RF) - Encoder(LB))/4;
+        int y_traveled =  (Encoder(LF) + Encoder(RB) + Encoder(RF) + Encoder(LB))/4;
+
+        if (4 * abs(x_traveled) > 3 * abs(x_distance) || 4 * abs(y_traveled) > 3 * abs(y_distance))
+        {
+          //RAMP DOWN
+        }
+        else
+        {
+          //RAMP UP AND MAINTAINING SPEED
+          if (power < 127)
+          {
+            power = min(127, power + 5);
+            wait1Msec(30);
+          }
+        }
+    }
 }
