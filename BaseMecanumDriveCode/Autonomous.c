@@ -45,22 +45,29 @@ void automove(int angle, int distance)
     //Variable for PID loop
     int power = 0;
 
-    //The PID Progression used will be a gradual ramp up with a defining power variable which will be indexed.
-    while( /* insert test case here */)
-    {
-        //Movement functions
-        move(LF, power * (sin_x + cos_x));
-        move(RB, power * (sin_x + cos_x));
-        move(LB, power * (sin_x - cos_x));
-        move(RF, power * (sin_x - cos_x));
+    //Defining them up here so that they make sense scope-wise
+    int x_traveled = 0;
+    int y_traveled = 0;
 
+    //The PID Progression used will be a gradual ramp up with a defining power variable which will be indexed.
+    while( abs(x_traveled - x_distance) + abs(y_traveled - y_distance) < 40) //The number 40 is just a constant for accuracy
+    {
         //Calculation of values traveled
-        int x_traveled = (Encoder(LF) + Encoder(RB) - Encoder(RF) - Encoder(LB))/4;
+        x_traveled = (Encoder(LF) + Encoder(RB) - Encoder(RF) - Encoder(LB))/4;
         int y_traveled =  (Encoder(LF) + Encoder(RB) + Encoder(RF) + Encoder(LB))/4;
 
         if (4 * abs(x_traveled) > 3 * abs(x_distance) || 4 * abs(y_traveled) > 3 * abs(y_distance))
         {
           //RAMP DOWN
+          //here the power will be proportional to the distance required to travel
+          //we will define two power variables (in the x and y)
+          int power_x = (x_distance - x_traveled) * 127 / x_distance;
+          int power_y = (y_distance - y_traveled) * 127 / y_distance;
+          move(LF, power_y + power_x);
+          move(RB, power_y + power_x);
+          move(LB, power_y - power_x);
+          move(RF, power_y - power_x);
+
         }
         else
         {
@@ -68,7 +75,16 @@ void automove(int angle, int distance)
           if (power < 127)
           {
             power = min(127, power + 5);
-            wait1Msec(30);
+
+            //Movement functions for standard motion
+            move(LF, power * (sin_x + cos_x));
+            move(RB, power * (sin_x + cos_x));
+            move(LB, power * (sin_x - cos_x));
+            move(RF, power * (sin_x - cos_x));
+
+            wait1Msec(30); //So that ramp up is not instantaneous
+
+
           }
         }
     }
