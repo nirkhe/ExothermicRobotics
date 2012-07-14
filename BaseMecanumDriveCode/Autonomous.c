@@ -34,7 +34,8 @@ void automove(int angle, int distance)
 
     //We will use these trignometric values a lot
     //So to avoid computation time, we just define their values early on
-    float cos_x = cos(angle * pi / 180), sin_x = sin(angle * pi / 180);
+    //Look in the math package to realize what is going on
+    float cos_x = fcosine(angle), sin_x = fsine(angle);
 
     //Using trig, I will convert the movement to the appropriate linear components
     int x_distance = (int)(distance * cos_x);

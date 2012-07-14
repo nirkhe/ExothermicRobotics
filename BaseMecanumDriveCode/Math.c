@@ -16,6 +16,8 @@ float sine[91] = {0.0, 0.017452406, 0.034899496, 0.052335955, 0.06975647, 0.0871
 0.8910065, 0.89879405, 0.9063078, 0.9135454, 0.92050487, 0.92718387, 0.9335804, 0.9396926, 0.94551855, 0.95105654, 0.9563047, 0.9612617, 0.9659258, 0.9702957, 0.97437006, 0.9781476, 0.98162717, 0.9848077, 0.98768836, 0.99026805, 0.99254614, 0.9945219, 0.9961947, 0.9975641, 0.9986295, 0.99939084, 0.9998477, 1.0};
 #endif
 
+//It's often difficult for programs to calculate sine values (complex mathematics)
+//So to speed things up, we precalculate values and store them in an array for quick retrieval
 float fsine(int angle)
 {
   while (angle < 0)
