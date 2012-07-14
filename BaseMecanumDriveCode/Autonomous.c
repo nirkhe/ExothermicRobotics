@@ -99,7 +99,7 @@ void autorotate(int distance)
   //Initializing these variables so that they have a good scope.
   int left_traveled = 0, right_traveled = 0;
 
-  while(abs((abs(left_traveled) - abs(distance))) + abs((abs(right_traveled) - abs(distance))) < 40) //40 is a constant.
+  while( (abs(left_traveled) - abs(distance) + (abs(right_traveled) - abs(distance) < 40) //40 is a constant.
   {
      left_traveled = (Encoder(LF) + Encoder(LB)) / 2;
      right_traveled = (Encoder(RF) + Encoder(RB)) / 2;
