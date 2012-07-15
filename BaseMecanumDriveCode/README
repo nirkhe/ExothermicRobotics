@@ -1,0 +1,38 @@
+Welcome to the README of this Mecanum Code.
+
+I am going to explain a few coding practices of mine that I have found really helpful at simplify coding for reading and debugging. These tricks do not affect the speed of your code.
+
+If you look at the files in this program, you will see that the all include the following:
+
+#include "Utility.c";
+
+and that the Utility.c file contains one linking it to the "Math.c" file. This is just an organizational tecnhique that helps me put "grunt" commands in the Utility file and so that I can focus on higher level programming in the other files. The Math file just includes some algorithms that may come up while solving these issues (including fast ways of calculating trignometric functions).
+
+The other practice that I have is defining Motors and Sensors as "pseudo-classes". If you have learnt object oriented programming, this should make some more sense to you. The motors and sensors are stored in an array by the cortex and are accessed by the name keywords that we give them. Unfortunately we cannot manipulate strings in robotc so we have to come up with our index system.
+
+You will notice that at the top of the Utility file, there are a set of definitions:
+
+#define RF 0
+#define RB 1
+#define LF 2
+#define LB 3
+#define EX1 4
+#define EX2 5
+
+These simply define each of the motors by an index value so that while coding instead of construction 100 different methods for each motion such as MoveRightMotor() and MoveLeftMotor(), we now just have the method move() which will handle all of these problems by packaging them into one method that will figure out what exactly needs moving.
+
+void move(int motorint, int power)
+{
+  if( motorint == RB)
+    motor[RightBackTop] = motor[RightBackBottom] = power;
+  else if ( motorint == RF )
+    motor[RightFront] = power;
+  else if ( motorint == LB )
+    motor[LeftBackBottom] = motor[LeftBackTop] = power;
+  else if ( motorint == LF )
+    motor[LeftFront] = power;
+  else if ( motorint == EX1 )
+    motor[ExtraOne] = power;
+  else if (motorint == EX2 )
+    motor[ExtraTwo] = power;
+}

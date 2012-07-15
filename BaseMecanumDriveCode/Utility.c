@@ -56,6 +56,28 @@ int v( int iActualValue )
 	}
 }
 
+void ResetEncoders()
+{
+  SensorValue[LeftBackEncoder] = 0;
+  SensorValue[RightBackEncoder] = 0;
+  SensorValue[LeftFrontEncoder] = 0;
+  SensorValue[RightFrontEncoder] = 0;
+}
+
+int Encoder(int sensor)
+{
+  if (sensor == LB)
+    return SensorValue[LeftBackEncoder];
+  if (sensor == RB)
+    return SensorValue[RightBackEncoder];
+  if (sensor == LF)
+    return SensorValue[LeftFrontEncoder];
+  if (sensor == RF)
+    return SensorValue[RightFrontEncoder];
+  else
+    return 0;
+
+}
 
 
 void move(int motorint, int power)
