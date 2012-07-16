@@ -99,22 +99,36 @@ void autorotate(int distance)
   //Initializing these variables so that they have a good scope.
   int left_traveled = 0, right_traveled = 0;
 
-  while(abs(abs(left_traveled) - abs(distance)) + abs(abs(right_traveled) - abs(distance)) < 40) //40 is a constant.
+
+  while( (abs(left_traveled) - abs(distance) + (abs(right_traveled) - abs(distance) < 40) //40 is a constant.
   {
      left_traveled = (Encoder(LF) + Encoder(LB)) / 2;
      right_traveled = (Encoder(RF) + Encoder(RB)) / 2;
 
-     if ( 4 * abs(abs(distance) - abs(left_traveled)) > 3 * abs(distance) || 4 * abs(abs(distance) - abs(right_traveled)) > 3 * abs(distance))
+     int power = 0;
+
+     int left_left = (abs(distance) - abs(left_traveled)), right_left = (abs(distance) - abs(right_traveled));
+
+     if ( 4 * abs(left_left) > 3 * abs(distance) || 4 * abs(right_left) > 3 * abs(distance))
      {
           //RAMP DOWN
           //here the power will be proportional to the distance required to travel
           //These are only the magnitudes of the powers
-          int power_left = abs(abs(distance) - abs(left_traveled)) * 127.0 / abs(distance);
-          int power_right = abs(abs(distance) - abs(left_traveled)) * 127.0 / abs(distance);
+          int power_left = (abs(distance) - abs(left_traveled)) * 127.0 / distance;
+          int power_right = (abs(distance) - abs(left_traveled)) * 127.0 / distance;
+
+          power_left = abs(power_left);
+          power_right = abs(power_right);
 
           //Setting direction based on initial command
-          //Read online about the trinary operator if you are confused by the syntax.
-          (distance < 0 ? power_left : power_right) *= -1;
+          if (distance < 0)
+          {
+            power_left = -power_left;
+          }
+          else
+          {
+            power_right = -power_right;
+          }
 
           //Setting direction based on current motion
           if (abs(left_traveled) > abs(distance))
@@ -144,7 +158,14 @@ void autorotate(int distance)
             int power_left = power, power_right = power;
 
             //Setting the direction
-            (distance < 0 ? power_left : power_right) *= -1;
+            if (distance < 0)
+            {
+              power_left = -power_left;
+            }
+            else
+            {
+              power_right = -power_right;
+            }
 
             //Movement functions for standard motion
             move(LF, power_left);
